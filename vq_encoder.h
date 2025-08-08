@@ -192,7 +192,7 @@ public:
         const CompressionParams& params
     );
 
-    // --- ADDED: Public API for HDR VQ ---
+    // --- Public API for HDR VQ ---
     VQCodebook BuildCodebookHDR(
         const std::vector<std::vector<float>>& rgbaFloatBlocks,
         std::vector<std::vector<float>>& outRgbaCentroids,

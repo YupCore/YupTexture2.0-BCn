@@ -36,23 +36,23 @@ private:
 
     std::unique_ptr<ZstdContext> zstdCtx;
 
-    // --- ADDED: Dictionary pointers ---
+    // --- Dictionary pointers ---
     ZSTD_CDict* cdict = nullptr;
     ZSTD_DDict* ddict = nullptr;
 
     // Helper to compress a payload with ZSTD
-    // --- MODIFIED: Now supports Long-Distance Matching and uses dictionaries ---
+    // --- Now supports Long-Distance Matching and uses dictionaries ---
     std::vector<uint8_t> compressWithZstd(const std::vector<uint8_t>& payload, int level, int numThreads, bool enableLdm) {
         size_t compBound = ZSTD_compressBound(payload.size());
         std::vector<uint8_t> compressedPayload(compBound);
 
         ZSTD_CCtx_setParameter(zstdCtx->cctx, ZSTD_c_nbWorkers, numThreads);
         ZSTD_CCtx_setParameter(zstdCtx->cctx, ZSTD_c_compressionLevel, level);
-        // --- ADDED: Enable/disable Long-Distance Matching ---
+        // --- Enable/disable Long-Distance Matching ---
         ZSTD_CCtx_setParameter(zstdCtx->cctx, ZSTD_c_enableLongDistanceMatching, enableLdm ? 1 : 0);
 
         size_t compressedSize;
-        // --- ADDED: Use dictionary if available ---
+        // --- Use dictionary if available ---
         if (cdict) {
             compressedSize = ZSTD_compress_usingCDict(
                 zstdCtx->cctx,
@@ -79,13 +79,13 @@ private:
 public:
     VQBCnCompressor() : zstdCtx(std::make_unique<ZstdContext>()) {}
 
-    // --- ADDED: Destructor to free dictionaries ---
+    // --- Destructor to free dictionaries ---
     ~VQBCnCompressor() {
         ZSTD_freeCDict(cdict);
         ZSTD_freeDDict(ddict);
     }
 
-    // --- ADDED: Method to load a pre-trained dictionary ---
+    // --- Method to load a pre-trained dictionary ---
     void LoadDictionary(const uint8_t* dictData, size_t dictSize) {
         // Free any existing dictionaries
         ZSTD_freeCDict(cdict);
@@ -228,7 +228,7 @@ public:
         result.info.format = params.bcFormat;
         result.info.compressionFlags = COMPRESSION_FLAGS_DEFAULT;
 
-        // --- ADDED: Check for large texture to enable LDM ---
+        // --- Check for large texture to enable LDM ---
         bool enableLdm = (width >= 4000 || height >= 4000);
 
         auto bcData = bcnCompressor.CompressRGBA(
@@ -439,7 +439,7 @@ public:
             payload.resize(decompressedSize);
 
             size_t dSize;
-            // --- MODIFIED: Use dictionary if available ---
+            // --- Use dictionary if available ---
             if (ddict) {
                 dSize = ZSTD_decompress_usingDDict(
                     zstdCtx->dctx,
@@ -501,7 +501,7 @@ public:
             bcData.data(), compressed.info.width, compressed.info.height, compressed.info.format
         );
 
-        // --- ADDED: Apply filter if requested ---
+        // --- Apply filter if requested ---
         if (applyDeblocking && !rgbaData.empty()) {
             ApplyDeblockingFilter(rgbaData, compressed.info.width, compressed.info.height);
         }
@@ -518,7 +518,7 @@ public:
             bcData.data(), compressed.info.width, compressed.info.height, compressed.info.format
         );
 
-        // --- ADDED: Apply filter if requested ---
+        // --- Apply filter if requested ---
         if (applyDeblocking && !rgbaFloatData.empty()) {
             ApplyDeblockingFilter(rgbaFloatData, compressed.info.width, compressed.info.height);
         }

@@ -74,7 +74,7 @@ public:
         return compressedData;
     }
 
-    // --- ADDED: HDR Compression ---
+    // --- HDR Compression ---
     std::vector<uint8_t> CompressHDR(
         const float* rgbaData,
         uint32_t width,
@@ -157,7 +157,7 @@ public:
         return rgbaData;
     }
 
-    // --- ADDED: HDR Decompression ---
+    // --- HDR Decompression ---
     std::vector<float> DecompressToRGBAF(
         const uint8_t* bcData,
         uint32_t width,

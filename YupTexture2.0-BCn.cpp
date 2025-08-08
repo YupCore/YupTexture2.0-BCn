@@ -18,7 +18,7 @@ namespace fs = std::filesystem;
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-// --- MODIFIED: Image class to support LDR (uint8_t) and HDR (float) data ---
+// --- Image class to support LDR (uint8_t) and HDR (float) data ---
 class Image {
 public:
     int width = 0;
@@ -40,7 +40,7 @@ public:
                 std::cerr << "Failed to load HDR image: " << stbi_failure_reason() << std::endl;
                 return false;
             }
-            size_t dataSize = (size_t)width * height * 4;
+            size_t dataSize = (size_t)width * height * channels;
             std::vector<float> float_data(pixels, pixels + dataSize);
             data = std::move(float_data);
             stbi_image_free(pixels);
@@ -169,7 +169,7 @@ MyTextureType classifyTextureByFilename(const std::string& filename) {
     return MyTextureType::Unknown;
 }
 
-// --- MODIFIED: Main processing function now handles LDR/HDR ---
+// --- Main processing function now handles LDR/HDR ---
 void ProcessImage(const std::filesystem::path& filePath, VQBCnCompressor& compressor) {
     std::cout << "\n--- Processing: " << filePath.filename().string() << " ---\n";
     Image image;
@@ -198,7 +198,7 @@ void ProcessImage(const std::filesystem::path& filePath, VQBCnCompressor& compre
     case HDR:
         std::cout << "Texture Type: HDR (Using BC6H with VQ)\n";
         params.bcFormat = BCFormat::BC6H;
-        // --- MODIFIED: Enable VQ for HDR and set params ---
+        // --- Enable VQ for HDR and set params ---
 		params.bcQuality = 0.25f; // Use a lower quality for HDR to set reasonable compression time
         params.quality = 0.9f; // Use a high quality for HDR VQ
         params.vq_min_cb_power = 6;  // 64 entries

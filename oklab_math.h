@@ -13,7 +13,7 @@ namespace Oklab
     inline void srgb_to_lms(const float* rgb, float* lms) {
         lms[0] = 0.4122214708f * rgb[0] + 0.5363325363f * rgb[1] + 0.0514459929f * rgb[2];
         lms[1] = 0.2119034982f * rgb[0] + 0.6806995451f * rgb[1] + 0.1073969566f * rgb[2];
-        lms[2] = 0.0883024619f * rgb[0] + 0.2817188376f * rgb[1] + 0.6299787005f * rgb[2]; // fixed
+		lms[2] = 0.0883024619f * rgb[0] + 0.2817188376f * rgb[1] + 0.6299787005f * rgb[2]; // fixed the simplification error
     }
 
     inline void lms_to_oklab(const float* lms, float* lab) {

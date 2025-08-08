@@ -38,14 +38,12 @@ struct BCBlockSize {
     }
 };
 
-// --- MODIFIED: Added IS_HDR flag ---
 // Flags to indicate which compression steps were used.
 enum CompressionFlags : uint32_t {
     COMPRESSION_FLAGS_DEFAULT = 0,
     COMPRESSION_FLAGS_VQ_BYPASSED = 1 << 0, // VQ was skipped, payload is raw BCn data.
     COMPRESSION_FLAGS_ZSTD_BYPASSED = 1 << 1, // ZSTD was skipped, payload is not zstd-compressed.
-    COMPRESSION_FLAGS_IS_HDR = 1 << 2,      // The source texture was HDR (float data).
-    COMPRESSION_FLAGS_USES_PQ = 1 << 3
+    COMPRESSION_FLAGS_IS_HDR = 1 << 2      // The source texture was HDR (float data).
 };
 
 struct TextureInfo {
